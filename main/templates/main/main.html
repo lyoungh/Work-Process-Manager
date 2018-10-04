@@ -33,7 +33,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid table-responsive " style="height: 500px;">
     <table class="table">
         <thead>
         <tr>
@@ -50,14 +50,14 @@
         <tbody>
         {% for work in object_list %}
             <tr>
-            <th scope="row">{{ work.id }}</th>
-            <td scope="row">{{ work.manager }}</td>
-            <td scope="row">{{ work.supporter }}</td>
-            <td scope="row">{{ work.work }}</td>
-            <td scope="row">{{ work.status }}</td>
-            <td scope="row">{{ work.start_date }}</td>
-            <td scope="row">{{ work.expected_end_date }}</td>
-            <td scope="row">{{ work.end_date }}</td>
+                <th scope="row">{{ work.id }}</th>
+                <td scope="row">{{ work.manager }}</td>
+                <td scope="row">{{ work.supporter }}</td>
+                <td scope="row"><a href="#" id="work{{ work.id }}">{{ work.work }}</a></td>
+                <td scope="row">{{ work.status }}</td>
+                <td scope="row">{{ work.start_date }}</td>
+                <td scope="row">{{ work.expected_end_date }}</td>
+                <td scope="row">{{ work.end_date }}</td>
             </tr>
         {% empty %}
             <tr>No work yet.</tr>
@@ -65,5 +65,38 @@
         </tbody>
     </table>
 </div>
+<div class="container justify-content-md-center" id="field">
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
+<script type="text/javascript">
+    let clickedWork;
+    let isClicked = false;
+    $(function () {
+        $('#field').hide();
+        {% for work in object_list %}
+            $('#work{{ work.id }}').click(() => {
+                {#alert("clicked");#}
+                if (isClicked === false){
+                    $('#field').show();
+                    isClicked = true;
+                } else {
+                    $('#field').hide();
+                    isClicked = false;
+                }
+            });
+        {% endfor %}
+    });
+
+    function getHtml(){
+        var result = '';
+        result += `{{ form.as_p }}`;
+        result += ``;
+        return result;
+    }
+</script>
 </html>
