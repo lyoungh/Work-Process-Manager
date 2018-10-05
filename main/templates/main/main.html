@@ -29,12 +29,12 @@
             </div>
         </div>
         <div class=" mt-5 pt-3 ml-auto">
-            <button type="button" class="btn btn-primary">업무 생성</button>
+            <button type="button" id="createWorkBtn" class="btn btn-primary">업무 생성</button>
         </div>
     </div>
 </div>
-<div class="container-fluid table-responsive " style="height: 500px;">
-    <table class="table">
+<div class="container-fluid table-responsive " style="max-height: 500px;">
+    <table class="table-bordered table">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -65,8 +65,9 @@
         </tbody>
     </table>
 </div>
-<div class="container justify-content-md-center" id="field">
+<div class="container justify-content-md-center" id="field" style="margin-top: 50px;background-color: #f9f9f9;padding: 50px 20px 10px;">
     <form action="." method="post" id="updateForm">
+        <h2 id="formTitle"></h2>
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -82,6 +83,7 @@
             $('#work{{ work.id }}').click(() => {
                 {#alert("clicked");#}
                 if (isClicked === false){
+                    $('#formTitle').text("#{{ work.id }} 업무");
                     $('#field').show();
                     $("#updateForm").attr("action", "/update/{{ work.id }}");
                     $('#id_manager').val("{{ work.manager }}");
@@ -99,6 +101,10 @@
             });
         {% endfor %}
 
+
+        $('#createWorkBtn').click(() => {
+            location.href = '/create';
+        })
     });
 
     function getHtml(){
