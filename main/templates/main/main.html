@@ -70,12 +70,13 @@
         <h2 id="formTitle"></h2>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" id="delete" class="float-left btn btn-danger">Delete</button>
+        <button type="submit" class="float-right btn btn-primary">Submit</button>
     </form>
 </div>
 </body>
 <script type="text/javascript">
-    let clickedWork;
+    let deleteID;
     let isClicked = false;
     $(function () {
         $('#field').hide();
@@ -84,6 +85,7 @@
                 {#alert("clicked");#}
                 if (isClicked === false){
                     $('#formTitle').text("#{{ work.id }} 업무");
+                    deleteID = {{ work.id }};
                     $('#field').show();
                     $("#updateForm").attr("action", "/update/{{ work.id }}");
                     $('#id_manager').val("{{ work.manager }}");
@@ -104,6 +106,10 @@
 
         $('#createWorkBtn').click(() => {
             location.href = '/create';
+        });
+
+        $('#delete').click(() => {
+            location.href = '/delete/'+deleteID;
         })
     });
 

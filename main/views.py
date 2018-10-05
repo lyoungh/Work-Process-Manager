@@ -47,3 +47,10 @@ class CreateWorkView(CreateView):
 
     def get_success_url(self):
         return reverse('index')
+
+
+def delete_work(request, id):
+    if request.method == "GET":
+        work = Work.objects.get(pk=id)
+        work.delete()
+        return redirect('/')

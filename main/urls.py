@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import MainView, update_work, CreateWorkView
+from .views import MainView, update_work, CreateWorkView,delete_work
 
 urlpatterns = [
     path('', MainView.as_view(), name='index'),
     path('update/<int:id>', update_work),
-    path('create/', CreateWorkView.as_view())
+    path('create/', CreateWorkView.as_view()),
+    path('delete/<int:id>', delete_work)
 ]
