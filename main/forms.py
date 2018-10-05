@@ -20,8 +20,8 @@ class WorkForm(forms.ModelForm):
         fields = '__all__'
 
         status_CHOICE = (
-            ('1', 'Doing'),
-            ('2', 'Planning')
+            ('Doing', 'Doing'),
+            ('Planning', 'Planning')
         )
         widgets = {
             'manager': forms.TextInput(attrs={'class': 'form-control'}),

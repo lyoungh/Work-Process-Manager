@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import MainView
+from .views import MainView, update_work
 
 urlpatterns = [
-    path('', MainView.as_view(), name='index')
-
+    path('', MainView.as_view(), name='index'),
+    path('update/<int:id>', update_work),
 ]

@@ -55,9 +55,9 @@
                 <td scope="row">{{ work.supporter }}</td>
                 <td scope="row"><a href="#" id="work{{ work.id }}">{{ work.work }}</a></td>
                 <td scope="row">{{ work.status }}</td>
-                <td scope="row">{{ work.start_date }}</td>
-                <td scope="row">{{ work.expected_end_date }}</td>
-                <td scope="row">{{ work.end_date }}</td>
+                <td scope="row">{{ work.start_date|date:"Y-m-d" }}</td>
+                <td scope="row">{{ work.expected_end_date|date:"Y-m-d" }}</td>
+                <td scope="row">{{ work.end_date|date:"Y-m-d" }}</td>
             </tr>
         {% empty %}
             <tr>No work yet.</tr>
@@ -66,7 +66,7 @@
     </table>
 </div>
 <div class="container justify-content-md-center" id="field">
-    <form action="." method="post">
+    <form action="." method="post" id="updateForm">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -83,6 +83,14 @@
                 {#alert("clicked");#}
                 if (isClicked === false){
                     $('#field').show();
+                    $("#updateForm").attr("action", "/update/{{ work.id }}");
+                    $('#id_manager').val("{{ work.manager }}");
+                    $('#id_supporter').val("{{ work.supporter }}");
+                    $('#id_work').val("{{ work.work }}");
+                    $('#id_status').val("{{ work.status }}");
+                    $('#id_start_date').val("{{ work.start_date|date:"Y-m-d" }}");
+                    $('#id_expected_end_date').val("{{ work.expected_end_date|date:"Y-m-d" }}");
+                    $('#id_end_date').val("{{ work.end_date|date:"Y-m-d" }}");
                     isClicked = true;
                 } else {
                     $('#field').hide();
@@ -90,6 +98,7 @@
                 }
             });
         {% endfor %}
+
     });
 
     function getHtml(){
@@ -98,5 +107,7 @@
         result += ``;
         return result;
     }
+
+
 </script>
 </html>
