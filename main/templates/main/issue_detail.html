@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>업무 생성</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-5 justify-content-md-center">
+        <p class="h2">#{{ object.id }} 이슈</p>
+    </div>
+    <div class="row mt-5 justify-content-md-center">
+        <div class="col-lg-9 col-md-9 ">
+            <div class="table-responsive panel">
+                <table class="table">
+                    <tbody>
+
+                    <tr>
+                        <td class="text-success">관련 업무</td>
+                        <td>{{ object.work.work }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">이슈 번호</td>
+                        <td>{{ object.id }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">발생 일자</td>
+                        <td>{{ object.start_date|date:"Y-m-d" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">업무 협조</td>
+                        <td>{{ object.end_date|date:"Y-m-d" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">업무 내용</td>
+                        <td>{{ object.content }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">업무 상태</td>
+                        <td>{{ object.replay }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">시작일</td>
+                        <td>{{ object.cause }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-success">종료 예정일</td>
+                        <td>{{ object.solution }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5 justify-content-between justify-content-md-center">
+        <div class="col-lg-9 col-md-9">
+            <button type="button" id="cancel" class="float-left btn btn-danger">뒤로</button>
+            <button type="submit" class="float-right btn btn-primary">수정</button>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#cancel').click(() => {
+            location.href = '/'
+        })
+    })
+</script>
+</html>

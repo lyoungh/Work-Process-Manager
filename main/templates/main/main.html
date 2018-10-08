@@ -65,14 +65,37 @@
         </tbody>
     </table>
 </div>
-<div class="container justify-content-md-center" id="field" style="margin-top: 50px;background-color: #f9f9f9;padding: 50px 20px 10px;">
-    <form action="." method="post" id="updateForm">
+<div class="container justify-content-md-center" id="field" style="margin-top: 50px; background-color: #f9f9f9;padding: 50px 20px 10px;">
+    <div class="row p-3 justify-content-between">
         <h2 id="formTitle"></h2>
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="button" id="delete" class="float-left btn btn-danger">Delete</button>
-        <button type="submit" class="float-right btn btn-primary">Submit</button>
-    </form>
+        <button type="button" id="UpdateWorkBtn" class="btn btn-primary">업무 수정</button>
+    </div>
+    <div class="row">
+        <table class="table-bordered table table-hover" style="font-size: 13px;" id="issueTable">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">발생 일자</th>
+                <th scope="col">종료 일자</th>
+                <th scope="col">증상</th>
+                <th scope="col">상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for issue in issues %}
+                <tr class="issue{{ issue.work.id }} issue" onclick="window.location.href='/issueDetail/{{ issue.id }}';">
+                    <th scope="row">{{ issue.id }}</th>
+                    <td>{{ issue.start_date|date:"Y-m-d" }}</td>
+                    <td>{{ issue.end_date|date:"Y-m-d" }}</td>
+                    <td>{{ issue.content }}</td>
+                    <td>{{ issue.status }}</td>
+                </tr>
+            {% empty %}
+                <tr>No work yet.</tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
@@ -81,28 +104,35 @@
     $(function () {
         $('#field').hide();
         {% for work in object_list %}
+            $('.issue{{ work.id }}').hide();
             $('#work{{ work.id }}').click(() => {
                 {#alert("clicked");#}
                 if (isClicked === false){
-                    $('#formTitle').text("#{{ work.id }} 업무");
+                    $('#formTitle').text("#{{ work.id }} 업무의 이슈");
                     deleteID = {{ work.id }};
                     $('#field').show();
                     $("#updateForm").attr("action", "/update/{{ work.id }}");
                     $('#id_manager').val("{{ work.manager }}");
-                    $('#id_supporter').val("{{ work.supporter }}");
+                   $('#id_supporter').val("{{ work.supporter }}");
                     $('#id_work').val("{{ work.work }}");
                     $('#id_status').val("{{ work.status }}");
                     $('#id_start_date').val("{{ work.start_date|date:"Y-m-d" }}");
                     $('#id_expected_end_date').val("{{ work.expected_end_date|date:"Y-m-d" }}");
                     $('#id_end_date').val("{{ work.end_date|date:"Y-m-d" }}");
+                    $('#UpdateWorkBtn').click(() => {
+                        location.href = '/update/{{ work.id }}';
+                    });
+                    $('.issue{{ work.id }}').show();
                     isClicked = true;
                 } else {
                     $('#field').hide();
+                    {% for work in object_list %}
+                        $('.issue{{ work.id }}').hide();
+                    {% endfor %}
                     isClicked = false;
                 }
             });
         {% endfor %}
-
 
         $('#createWorkBtn').click(() => {
             location.href = '/create';

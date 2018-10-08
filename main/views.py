@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import ListView, CreateView
-from .models import Work
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from .models import Work, Issue
 from .forms import WorkForm
 from django.views.generic.edit import FormMixin
 
@@ -16,7 +16,7 @@ class MainView(ListView, FormMixin):
     def get_context_data(self, **kwargs):
         form = self.form_class()
         context = super().get_context_data(**kwargs)
-        context['form'] = form
+        context['issues'] = Issue.objects.all()
         return context
 
 
@@ -47,6 +47,21 @@ class CreateWorkView(CreateView):
 
     def get_success_url(self):
         return reverse('index')
+
+
+class UpdateWorkView(UpdateView):
+    model = Work
+    form_class = WorkForm
+    template_name = 'main/work_update_form.html'
+
+    def get_success_url(self):
+        return reverse('index')
+
+
+class DetailIssueView(DetailView):
+    model = Issue
+    template_name = 'main/issue_detail.html'
+
 
 
 def delete_work(request, id):
