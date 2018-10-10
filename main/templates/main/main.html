@@ -53,7 +53,11 @@
                 <th scope="row">{{ work.id }}</th>
                 <td scope="row">{{ work.manager }}</td>
                 <td scope="row">{{ work.supporter }}</td>
-                <td scope="row"><a href="#" id="work{{ work.id }}">{{ work.work }}</a></td>
+                <td scope="row ">
+                    <a href="#" class="float-left" id="work{{ work.id }}">{{ work.work }}</a>
+                    <button type="button"  class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#deleteModal" data-whatever="{{ work.id }}">삭제</button>
+                    <button type="button" onclick="window.location.href='/update/{{ work.id }}';" class="btn btn-primary btn-sm float-right">수정</button>
+                </td>
                 <td scope="row">{{ work.status }}</td>
                 <td scope="row">{{ work.start_date|date:"Y-m-d" }}</td>
                 <td scope="row">{{ work.expected_end_date|date:"Y-m-d" }}</td>
@@ -64,11 +68,32 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">확인</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    정말 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="button" id="deleteBtn" class="btn btn-danger">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="container justify-content-md-center" id="field" style="margin-top: 50px; background-color: #f9f9f9;padding: 50px 20px 10px;">
     <div class="row p-3 justify-content-between">
         <h2 id="formTitle"></h2>
-        <button type="button" id="UpdateWorkBtn" class="btn btn-primary">업무 수정</button>
+        <button type="button" onclick="window.location.href='/issue/create';" class="btn btn-primary">이슈 생성</button>
     </div>
     <div class="row">
         <table class="table-bordered table table-hover" style="font-size: 13px;" id="issueTable">
@@ -113,7 +138,7 @@
                     $('#field').show();
                     $("#updateForm").attr("action", "/update/{{ work.id }}");
                     $('#id_manager').val("{{ work.manager }}");
-                   $('#id_supporter').val("{{ work.supporter }}");
+                    $('#id_supporter').val("{{ work.supporter }}");
                     $('#id_work').val("{{ work.work }}");
                     $('#id_status').val("{{ work.status }}");
                     $('#id_start_date').val("{{ work.start_date|date:"Y-m-d" }}");
@@ -140,7 +165,19 @@
 
         $('#delete').click(() => {
             location.href = '/delete/'+deleteID;
+        });
+
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('whatever'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            $('#deleteBtn').click(() => {
+                location.href = '/delete/'+id;
+            });
         })
+
     });
 
     function getHtml(){

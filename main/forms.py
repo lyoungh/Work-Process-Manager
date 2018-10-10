@@ -1,5 +1,5 @@
 from django import forms
-from .models import Work
+from .models import Work,Issue
 
 
 # class WorkForm(forms.Form):
@@ -13,7 +13,12 @@ from .models import Work
 
 
 class WorkForm(forms.ModelForm):
-    end_date = forms.DateField(label="종료일", required=False)
+    # end_date = forms.DateField(label="종료일", required=False)
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(WorkForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['end_date'].required = False
 
     class Meta:
         model = Work
@@ -48,19 +53,26 @@ class WorkForm(forms.ModelForm):
 
 
 class IssueForm(forms.ModelForm):
-    end_date = forms.DateField(label="종료일", required=False)
+    # end_date = forms.DateField(label="종료일", required=False)
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(IssueForm, self).__init__(*args, **kwargs)
+        # there's a `fields` property now
+        self.fields['end_date'].required = False
+        self.fields['solution'].required = False
+        self.fields['replay'].required = False
+        self.fields['cause'].required = False
 
     class Meta:
-        model = Work
+        model = Issue
         fields = '__all__'
 
         status_CHOICE = (
-            ('Planning', 'Planning'),
-            ('Doing', 'Doing'),
-            ('Done', 'Done'),
-            ('Holding', 'Holding'),
-            ('Delay', 'Delay'),
-            ('Expired', 'Expired'),
+            ('분석', '분석'),
+            ('해결', '해결'),
+            ('보류', '보류'),
+            ('공개', '공개'),
         )
         widgets = {
             'content': forms.Textarea(attrs={'class': 'form-control'}),
@@ -69,7 +81,6 @@ class IssueForm(forms.ModelForm):
             'solution': forms.Textarea(attrs={'class': 'form-control'}),
             'status': forms.Select(choices=status_CHOICE, attrs={'class': 'form-control'}),
             'start_date': forms.DateInput(attrs={'class': 'form-control'}),
-            'expected_end_date': forms.DateInput(attrs={'class': 'form-control'}),
             'end_date': forms.DateInput(attrs={'class': 'form-control'}),
         }
         labels = {
