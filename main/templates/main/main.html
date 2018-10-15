@@ -49,7 +49,7 @@
         <tbody>
         {% for work in object_list %}
             <tr>
-                <th scope="row" class="workId">{{ work.id }}</th>
+                <th scope="row" class="workId">{{ forloop.counter }}</th>
                 <td scope="row" class="workMan">{{ work.manager }}</td>
                 <td scope="row">
                     {% for sup in work.supporter.all %}
