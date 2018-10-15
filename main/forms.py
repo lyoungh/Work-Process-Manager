@@ -1,5 +1,5 @@
 from django import forms
-from .models import Work,Issue
+from .models import Work, Issue, WorkStatus, IssueStatus, Employee
 
 
 # class WorkForm(forms.Form):
@@ -24,25 +24,20 @@ class WorkForm(forms.ModelForm):
         model = Work
         fields = '__all__'
 
-        status_CHOICE = (
-            ('Planning', 'Planning'),
-            ('Doing', 'Doing'),
-            ('Done', 'Done'),
-            ('Holding', 'Holding'),
-            ('Delay', 'Delay'),
-            ('Expired', 'Expired'),
-        )
+        # status_CHOICE = tuple(WorkStatus.objects.all())
+        # print(tuple(WorkStatus.objects.))
+
         widgets = {
-            'manager': forms.TextInput(attrs={'class': 'form-control'}),
-            'supporter': forms.TextInput(attrs={'class': 'form-control'}),
+            'manager': forms.Select(attrs={'class': 'form-control col-md-2'}),
+            'supporter': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
             'work': forms.Textarea(attrs={'class': 'form-control'}),
-            'status': forms.Select(choices=status_CHOICE, attrs={'class': 'form-control'}),
-            'start_date': forms.DateInput(attrs={'class': 'form-control'}),
-            'expected_end_date': forms.DateInput(attrs={'class': 'form-control'}),
-            'end_date': forms.DateInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control col-md-2'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control col-md-3', 'id':'datepicker1'}),
+            'expected_end_date': forms.DateInput(attrs={'class': 'form-control col-md-3', 'id':'datepicker2'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control col-md-3', 'id':'datepicker3'}),
         }
         labels = {
-            'manager': '관리자',
+            'manager': '담당자',
             'supporter': '업무 협조',
             'work': "업무 내용",
             'status': "업무 상태",
@@ -79,9 +74,9 @@ class IssueForm(forms.ModelForm):
             'replay': forms.Textarea(attrs={'class': 'form-control'}),
             'cause': forms.Textarea(attrs={'class': 'form-control'}),
             'solution': forms.Textarea(attrs={'class': 'form-control'}),
-            'status': forms.Select(choices=status_CHOICE, attrs={'class': 'form-control'}),
-            'start_date': forms.DateInput(attrs={'class': 'form-control'}),
-            'end_date': forms.DateInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control col-md-2'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control col-md-2', 'id':'datepicker1'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control col-md-2', 'id':'datepicker2'}),
         }
         labels = {
             'content': '증상',

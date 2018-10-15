@@ -1,13 +1,37 @@
+from datetime import datetime
+
 from django.db import models
 
 
-# Create your models here.
+class Employee(models.Model):
+    name = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name
+
+
+class WorkStatus(models.Model):
+    title = models.CharField(max_length=10)
+    value = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.title
+
+
+class IssueStatus(models.Model):
+    title = models.CharField(max_length=10)
+    value = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.title
+
+
 class Work(models.Model):
-    manager = models.CharField(max_length=10)
-    supporter = models.CharField(max_length=10)
+    manager = models.ForeignKey(Employee, on_delete=models.SET_NULL, related_name='manager', null=True)
+    supporter = models.ManyToManyField(Employee, blank=True)
     work = models.TextField()
-    status = models.CharField(max_length=10)
-    start_date = models.DateField()
+    status = models.ForeignKey(WorkStatus, on_delete=models.SET_NULL, related_name='status', null=True)
+    start_date = models.DateField(default=datetime.now)
     expected_end_date = models.DateField()
     end_date = models.DateField(null=True)
 
@@ -17,10 +41,10 @@ class Work(models.Model):
 
 class Issue(models.Model):
     work = models.ForeignKey(Work, on_delete=models.CASCADE)
-    start_date = models.DateField()
+    start_date = models.DateField(default=datetime.now)
     end_date = models.DateField(null=True)
     content = models.TextField(null=True)
-    status = models.CharField(max_length=10, default="분석")
+    status = models.ForeignKey(IssueStatus, on_delete=models.SET_NULL, related_name='status', null=True)
     replay = models.TextField(null=True)
     cause = models.TextField(null=True)
     solution = models.TextField(null=True)

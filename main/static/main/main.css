@@ -1,3 +1,13 @@
 .mainButton {
     float: right;
 }
+
+.table-fixed {
+    width: 100%;
+    /*table-layout: fixed;*/
+    word-break: break-all;
+}
+
+.workCon {
+    width: 800px;
+}

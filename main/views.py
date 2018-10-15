@@ -57,6 +57,15 @@ class CreateIssueView(CreateView):
     def get_success_url(self):
         return reverse('index')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'GET':
+            form = self.form_class(initial={'work': Work.objects.get(pk=self.kwargs['pk'])})
+            print(Work.objects.get(pk=self.kwargs['pk']))
+            context['form'] = form
+
+        return context
+
 
 class UpdateWorkView(UpdateView):
     model = Work
@@ -70,7 +79,7 @@ class UpdateWorkView(UpdateView):
 class UpdateIssueView(UpdateView):
     model = Issue
     form_class = IssueForm
-    template_name = 'main/work_update_form.html'
+    template_name = 'main/issue_update_form.html'
 
     def get_success_url(self):
         return reverse('index')

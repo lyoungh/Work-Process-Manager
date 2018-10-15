@@ -23,7 +23,8 @@ urlpatterns = [
     path('update/<int:pk>', UpdateWorkView.as_view()),
     path('issueUpdate/<int:pk>', UpdateIssueView.as_view()),
     path('create/', CreateWorkView.as_view()),
-    path('issue/create/', CreateIssueView.as_view()),
+    path('issueCreate/<int:pk>', CreateIssueView.as_view()),
+    path('issueCreate/', CreateIssueView.as_view()),
     path('delete/<int:id>', delete_work),
     path('issue/delete/<int:id>', delete_work),
 ]
