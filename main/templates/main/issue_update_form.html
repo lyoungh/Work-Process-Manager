@@ -21,6 +21,13 @@
         {% csrf_token %}
         <div class="form-group row">
             {{ form.subject.errors }}
+            <label for="id_work" class="col-md-2 col-form-label">업무</label>
+            <div class="col-md-10">
+                {{ form.work }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ form.subject.errors }}
             <label for="id_start_date" class="col-md-2 col-form-label">발생 일자</label>
             <div class="col-md-10">
                 {{ form.start_date }}
