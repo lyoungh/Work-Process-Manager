@@ -53,14 +53,20 @@
                 <td scope="row" class="workMan">{{ work.manager }}</td>
                 <td scope="row">
                     {% for sup in work.supporter.all %}
-                    {{ sup }}
+                        {{ sup }}
                     {% endfor %}
-{#                    {{ work.supporter.name }}#}
+                    {#                    {{ work.supporter.name }}#}
                 </td>
                 <td scope="row " class="workCon">
-                    <a href="#" class="float-left" id="work{{ work.id }}">{{ work.work }}</a>
-                    <button type="button"  class="btn btn-danger btn-sm float-right" data-toggle="modal" data-target="#deleteModal" data-whatever="{{ work.id }}">삭제</button>
-                    <button type="button" onclick="window.location.href='/update/{{ work.id }}';" class="btn btn-primary btn-sm float-right">수정</button>
+                    <div class="media">
+                        <div class="media-body">
+                            <a href="#" class="float-left" id="work{{ work.id }}">{{ work.work }}</a>
+                        </div>
+                        <div class="workBtnGroup ml-3">
+                            <button type="button"  class="btn btn-danger btn-sm float-right workBtn" data-toggle="modal" data-target="#deleteModal" data-whatever="{{ work.id }}">삭제</button>
+                            <button type="button" onclick="window.location.href='/update/{{ work.id }}';" class="btn btn-primary btn-sm float-right workBtn">수정</button>
+                        </div>
+                    </div>
                 </td>
                 <td scope="row">{{ work.status }}</td>
                 <td scope="row">{{ work.start_date|date:"Y-m-d" }}</td>

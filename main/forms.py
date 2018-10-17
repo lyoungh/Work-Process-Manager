@@ -70,6 +70,7 @@ class IssueForm(forms.ModelForm):
             ('공개', '공개'),
         )
         widgets = {
+            'work': forms.Select(attrs={'class': 'form-control col-md-2'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
             'replay': forms.Textarea(attrs={'class': 'form-control'}),
             'cause': forms.Textarea(attrs={'class': 'form-control'}),

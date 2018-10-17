@@ -11,3 +11,8 @@
 .workCon {
     width: 800px;
 }
+
+.workBtn {
+    position: absolute;
+    top: 0;
+}
