@@ -24,6 +24,9 @@
             <label for="id_work" class="col-md-2 col-form-label">업무</label>
             <div class="col-md-10">
                 {{ form.work }}
+                <div class="col-md-10 text-truncate mt-2">
+                    {{ work }}
+                </div>
             </div>
         </div>
         <div class="form-group row">
@@ -87,10 +90,12 @@
         })
     });
     $('#datepicker1').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap4',
+        format: 'yyyy-mm-dd',
     });
     $('#datepicker2').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap4',
+        format: 'yyyy-mm-dd',
     });
 </script>
 </html>

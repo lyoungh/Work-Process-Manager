@@ -70,14 +70,14 @@ class IssueForm(forms.ModelForm):
             ('공개', '공개'),
         )
         widgets = {
-            'work': forms.Select(attrs={'class': 'form-control col-md-2'}),
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
-            'replay': forms.Textarea(attrs={'class': 'form-control'}),
-            'cause': forms.Textarea(attrs={'class': 'form-control'}),
-            'solution': forms.Textarea(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control col-md-2'}),
-            'start_date': forms.DateInput(attrs={'class': 'form-control col-md-2', 'id':'datepicker1'}),
-            'end_date': forms.DateInput(attrs={'class': 'form-control col-md-2', 'id':'datepicker2'}),
+            'work': forms.HiddenInput(attrs={'class': 'form-control col-md-12', 'disabled':''}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+            'replay': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+            'cause': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+            'solution': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+            'status': forms.Select(attrs={'class': 'form-control col-md-3'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control col-md-3', 'id':'datepicker1'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control col-md-3', 'id':'datepicker2'}),
         }
         labels = {
             'content': '증상',

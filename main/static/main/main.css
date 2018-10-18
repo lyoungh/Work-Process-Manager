@@ -12,7 +12,15 @@
     width: 800px;
 }
 
-.workBtn {
-    position: absolute;
-    top: 0;
+.issueCon {
+    width: 1000px;
 }
+
+#issueTable tr {
+    cursor: pointer;
+}
+
+/*.workBtn {*/
+    /*position: absolute;*/
+    /*top: 0;*/
+/*}*/

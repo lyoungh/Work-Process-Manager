@@ -81,18 +81,22 @@
     $(function () {
         $('#cancel').click(() => {
             location.href = '/'
-        })
+        });
     })
 </script>
 <script>
         $('#datepicker1').datepicker({
-            uiLibrary: 'bootstrap4'
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy-mm-dd',
+            value: "{{ form.start_date.value|date:"Y-m-d" }}"
         });
         $('#datepicker2').datepicker({
-            uiLibrary: 'bootstrap4'
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy-mm-dd',
         });
         $('#datepicker3').datepicker({
-            uiLibrary: 'bootstrap4'
+            uiLibrary: 'bootstrap4',
+            format: 'yyyy-mm-dd',
         });
 </script>
 </html>
