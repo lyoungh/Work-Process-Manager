@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
-from .models import Work, Issue
+from .models import Work, Issue, WorkStatus, Employee
 from .forms import WorkForm, IssueForm
 from django.views.generic.edit import FormMixin
 
@@ -17,6 +17,108 @@ class MainView(ListView, FormMixin):
         form = self.form_class()
         context = super().get_context_data(**kwargs)
         context['issues'] = Issue.objects.all()
+        context['status'] = WorkStatus.objects.all()
+        context['employee'] = Employee.objects.all()
+        return context
+
+
+class SearchView(ListView):
+    template_name = 'main/main.html'
+    model = Work
+
+    def get_queryset(self):
+        self.manager= self.kwargs['manager']
+        self.status= self.kwargs['status']
+        self.contents =self.kwargs['contents']
+        if self.contents == "":
+            contents = ""
+
+        if self.manager == 'all' and self.status == 'all':
+            return Work.objects.filter(work__contains=self.contents)
+        elif self.manager == 'all':
+            return Work.objects.filter(work__contains=self.contents,
+                                       status__title__contains=self.status)
+        elif self.status == 'all':
+            return Work.objects.filter(work__contains=self.contents,
+                                       manager__name__contains=self.manager)
+        else:
+            return Work.objects.filter(work__contains=self.contents,
+                                       manager__name__contains=self.manager,
+                                       status__title__contains=self.status)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = Issue.objects.all()
+        context['status'] = WorkStatus.objects.all()
+        context['employee'] = Employee.objects.all()
+        if self.manager != 'all':
+            context['manager_query'] = self.manager
+        if self.status != 'all':
+            context['status_query'] = self.status
+
+        return context
+
+
+class SearchNoConView(ListView):
+    template_name = 'main/main.html'
+    model = Work
+
+    def get_queryset(self):
+        self.manager= self.kwargs['manager']
+        self.status= self.kwargs['status']
+
+        if self.manager == 'all' and self.status == 'all':
+            return Work.objects.all()
+        elif self.manager == 'all':
+            return Work.objects.filter(status__title__contains=self.status)
+        elif self.status == 'all':
+            return Work.objects.filter(manager__name__contains=self.manager)
+        else:
+            return Work.objects.filter(manager__name__contains=self.manager,
+                                       status__title__contains=self.status)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = Issue.objects.all()
+        context['status'] = WorkStatus.objects.all()
+        context['employee'] = Employee.objects.all()
+
+        if self.manager != 'all':
+            context['manager_query'] = self.manager
+        if self.status != 'all':
+            context['status_query'] = self.status
+        return context
+
+
+class SearchManView(ListView):
+    template_name = 'main/main.html'
+    model = Work
+
+    def get_queryset(self):
+        return Work.objects.filter(manager__name__contains=self.kwargs['query'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = Issue.objects.all()
+        context['status'] = WorkStatus.objects.all()
+        context['employee'] = Employee.objects.all()
+        context['manager_query'] =self.kwargs['query']
+        return context
+
+
+class SearchStatusView(ListView):
+    template_name = 'main/main.html'
+    model = Work
+
+    def get_queryset(self):
+        return Work.objects.filter(status__title__contains=self.kwargs['query'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues'] = Issue.objects.all()
+        context['status'] = WorkStatus.objects.all()
+        context['employee'] = Employee.objects.all()
+        context['status_query'] = self.kwargs['query']
         return context
 
 

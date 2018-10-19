@@ -11,24 +11,44 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'main/main.css' %}">
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
 </head>
 <body>
 <div class="container">
     <div class="row mt-5 justify-content-md-center">
-        <h1>업무 관리</h1>
+        <h1><a href="/" id="mainLink">업무 관리</a></h1>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-md-8 mt-5 pt-3">
+    <div class="row mb-3 justify-content-between">
+        <div class="float-left mt-5 pt-3">
+            <button type="button" id="createWorkBtn" class="btn btn-primary">업무 생성</button>
+        </div>
+        <div class="float-right col-md-8 mt-5 pt-3">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search ......" aria-label="Recipient's username">
                 <div class="input-group-append">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <button class="btn btn-outline-secondary dropdown-toggle" id="manLabel" type="button" data-toggle="dropdown" aia-haspopup="true" aria-expanded="false">모든 담당자</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item manBtn" href="#">모든 담당자</a>
+                        {% for emp in employee %}
+                            <a class="dropdown-item manBtn" href="#">{{ emp }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary dropdown-toggle" id="statLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">모든 상태</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item statBtn" href="#">모든 상태</a>
+                        {% for stat in status %}
+                            <a class="dropdown-item statBtn" href="#">{{ stat }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <input type="text" class="form-control" id="searchInput" placeholder="Search ......" aria-label="Recipient's username">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="searchBtn"><i class="fas fa-search"></i></span>
                 </div>
             </div>
-        </div>
-        <div class=" mt-5 pt-3 ml-auto">
-            <button type="button" id="createWorkBtn" class="btn btn-primary">업무 생성</button>
+
         </div>
     </div>
 </div>
@@ -118,7 +138,7 @@
             </thead>
             <tbody>
             {% for issue in issues %}
-                <tr class="issue{{ issue.work.id }} issue" onclick="window.location.href='/issueDetail/{{ issue.id }}';">
+                <tr class="issue{{ issue.work.id }} issue" onclick="window.location.href='/issueDetail/{{ issue.id }}'; $.cookie('visits', {{ issue.work.id }}); ">
                     <th scope="row">{{ issue.id }}</th>
                     <td>{{ issue.start_date|date:"Y-m-d" }}</td>
                     <td>{{ issue.end_date|date:"Y-m-d" }}</td>
@@ -143,7 +163,7 @@
             $('#work{{ work.id }}').click(() => {
                 {#alert("clicked");#}
                 if (isClicked === false){
-                    $('#formTitle').text("#{{ work.id }} 업무의 이슈");
+                    $('#formTitle').text("#{{ forloop.counter }} 업무의 이슈");
                     selectedID = {{ work.id }};
                     $('#field').show();
                     $("#updateForm").attr("action", "/update/{{ work.id }}");
@@ -168,6 +188,7 @@
                         $('.issue{{ work.id }}').hide();
                     {% endfor %}
                     isClicked = false;
+                    $.removeCookie("visits");
                 }
             });
         {% endfor %}
@@ -175,8 +196,6 @@
         $('#createWorkBtn').click(() => {
             location.href = '/create';
         });
-
-
 
         $('#deleteModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
@@ -187,7 +206,59 @@
             $('#deleteBtn').click(() => {
                 location.href = '/delete/'+id;
             });
-        })
+        });
+
+        $('.manBtn').on("click", (event) => {
+            {#console.log(event.target.innerHTML);#}
+            {#location.href = '/search/manager/'+event.target.innerHTML;#}
+            $('#manLabel').text(event.target.innerHTML);
+        });
+        $('.statBtn').on("click", (event) => {
+            $('#statLabel').text(event.target.innerHTML);
+        });
+
+        $('#searchBtn').click((e) => {
+            $manLabel = $('#manLabel');
+            $statLabel = $('#statLabel');
+            manVal = $manLabel.text();
+            statVal = $statLabel.text();
+            query = $("#searchInput").val();
+
+            if (manVal === "모든 담당자") {
+                manVal = 'all'
+            }
+            if (statVal === '모든 상태') {
+                statVal = 'all'
+            }
+
+            location.href = '/search/manager/'+manVal+'/status/'+statVal+'/contents/'+query;
+        });
+
+        $("#searchInput").keydown(function(key) {
+            if (key.keyCode === 13) {
+
+                $manLabel = $('#manLabel');
+                $statLabel = $('#statLabel');
+                manVal = $manLabel.text();
+                statVal = $statLabel.text();
+                query = $("#searchInput").val();
+
+                location.href = '/search/manager/'+manVal+'/status/'+statVal+'/contents/'+query;
+            }
+        });
+
+        if ($.cookie("visits")) {
+            console.log($.cookie("visits"));
+            $('#work'+$.cookie("visits")).trigger('click');
+        }
+
+        {% if status_query %}
+            $('#statLabel').text('{{ status_query }}');
+        {% endif %}
+
+        {% if manager_query %}
+            $('#manLabel').text('{{ manager_query }}');
+        {% endif %}
 
     });
 

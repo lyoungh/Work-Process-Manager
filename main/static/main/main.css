@@ -20,7 +20,14 @@
     cursor: pointer;
 }
 
-/*.workBtn {*/
-    /*position: absolute;*/
-    /*top: 0;*/
-/*}*/
+#searchBtn {
+    cursor: pointer;
+}
+
+#mainLink:link {
+    color: #000;
+}
+
+#mainLink:visited {
+    color: #000;
+}
