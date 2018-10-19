@@ -31,8 +31,8 @@ class Work(models.Model):
     supporter = models.ManyToManyField(Employee, blank=True)
     work = models.TextField()
     status = models.ForeignKey(WorkStatus, on_delete=models.SET_NULL, related_name='status', null=True)
-    start_date = models.DateField(default=datetime.now)
-    expected_end_date = models.DateField()
+    start_date = models.DateField(default=datetime.now, null=True)
+    expected_end_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
 
     def __str__(self):

@@ -20,14 +20,12 @@
     <form method="post">
         {% csrf_token %}
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_manager" class="col-md-2 col-form-label">담당자</label>
             <div class="col-md-10">
                 {{ form.manager }}
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_supporter" class="col-md-2 col-form-label">업무 협조</label>
             <div class="col-md-10">
                 {% for checkbox in form.supporter %}
@@ -38,35 +36,30 @@
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_work" class="col-md-2 col-form-label">업무 내용</label>
             <div class="col-md-10">
                 {{ form.work }}
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_status" class="col-md-2 col-form-label">상태</label>
             <div class="col-md-10">
                 {{ form.status }}
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_start_date" class="col-md-2 col-form-label">시작일</label>
             <div class="col-md-10">
                 {{ form.start_date }}
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_expected_end_date" class="col-md-2 col-form-label">종료 예정일</label>
             <div class="col-md-10">
                 {{ form.expected_end_date }}
             </div>
         </div>
         <div class="form-group row">
-            {{ form.subject.errors }}
             <label for="id_end_date" class="col-md-2 col-form-label">종료일</label>
             <div class="col-md-10">
                 {{ form.end_date }}
@@ -81,7 +74,41 @@
     $(function () {
         $('#cancel').click(() => {
             location.href = '/'
-        })
+        });
+
+        $('#id_status').change(function () {
+            if ($("#id_status option:selected").text() === "Doing") {
+                $("#datepicker1").attr("required", true);
+                $("#datepicker2").attr("required", true);
+                $("#datepicker3").attr("required", false);
+            }
+            if ($("#id_status option:selected").text() === "Planning") {
+                $("#datepicker1").attr("required", false);
+                $("#datepicker2").attr("required", true);
+                $("#datepicker3").attr("required", false);
+            }
+            if ($("#id_status option:selected").text() === "Done") {
+                $("#datepicker1").attr("required", true);
+                $("#datepicker2").attr("required", true);
+                $("#datepicker3").attr("required", true);
+            }
+            if ($("#id_status option:selected").text() === "Holding") {
+                $("#datepicker1").attr("required", false);
+                $("#datepicker2").attr("required", false);
+                $("#datepicker3").attr("required", false);
+            }
+            if ($("#id_status option:selected").text() === "Delay") {
+                $("#datepicker1").attr("required", true);
+                $("#datepicker2").attr("required", true);
+                $("#datepicker3").attr("required", false);
+            }
+            if ($("#id_status option:selected").text() === "Expired") {
+                $("#datepicker1").attr("required", false);
+                $("#datepicker2").attr("required", false);
+                $("#datepicker3").attr("required", false);
+            }
+        });
+        $('#id_status').trigger('change');
     });
 
     $('#datepicker1').datepicker({

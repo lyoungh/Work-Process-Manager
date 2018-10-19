@@ -19,6 +19,8 @@ class WorkForm(forms.ModelForm):
         super(WorkForm, self).__init__(*args, **kwargs)
         # there's a `fields` property now
         self.fields['end_date'].required = False
+        self.fields['start_date'].required = False
+        self.fields['expected_end_date'].required = True
 
     class Meta:
         model = Work
@@ -46,6 +48,19 @@ class WorkForm(forms.ModelForm):
             'end_date': "종료일",
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+        expected_end_date = cleaned_data.get('expected_end_date')
+        status = cleaned_data.get('status')
+        #
+        print(status)
+        if str(status) == 'Doing':
+            self.fields['start_date'].required = True
+        elif str(status) == 'Planning':
+            self.fields['start_date'].required = False
+
 
 class IssueForm(forms.ModelForm):
     # end_date = forms.DateField(label="종료일", required=False)
@@ -58,6 +73,7 @@ class IssueForm(forms.ModelForm):
         self.fields['solution'].required = False
         self.fields['replay'].required = False
         self.fields['cause'].required = False
+
 
     class Meta:
         model = Issue
