@@ -14,16 +14,13 @@
     <script src="{% static 'js/jquery.cookie.js' %}"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <div class="row mt-5 justify-content-md-center">
         <h1><a href="/" id="mainLink">업무 관리</a></h1>
     </div>
 
-    <div class="row mb-3 justify-content-between">
-        <div class="float-left mt-5 pt-3">
-            <button type="button" id="createWorkBtn" class="btn btn-primary">업무 생성</button>
-        </div>
-        <div class="float-right col-md-8 mt-5 pt-3">
+    <div class="row mb-3 float-right">
+        <div class="col-md-10 mt-5 pt-3">
             <div class="input-group mb-3">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary dropdown-toggle" id="manLabel" type="button" data-toggle="dropdown" aia-haspopup="true" aria-expanded="false">모든 담당자</button>
@@ -49,6 +46,9 @@
                 </div>
             </div>
 
+        </div>
+        <div class="mt-5 pt-3">
+                <button type="button" id="createWorkBtn" class="btn btn-primary">업무 생성</button>
         </div>
     </div>
 </div>
