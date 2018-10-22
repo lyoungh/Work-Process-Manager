@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import MainView, UpdateWorkView, CreateWorkView,delete_work, DetailIssueView, CreateIssueView,UpdateIssueView, SearchView, SearchNoConView
+from .views import MainView, UpdateWorkView, CreateWorkView,delete_work, DetailIssueView, CreateIssueView,UpdateIssueView, SearchView, SearchNoConView, delete_issue
 
 search_patterns = [
     path('manager/<manager>/status/<status>/contents/<contents>', SearchView.as_view(), name='search'),
@@ -34,6 +34,6 @@ urlpatterns = [
     path('issueCreate/<int:work>', CreateIssueView.as_view()),
     path('issueCreate/', CreateIssueView.as_view()),
     path('delete/<int:id>', delete_work),
-    path('issue/delete/<int:id>', delete_work),
+    path('issue/delete/<int:id>', delete_issue),
 ]
 
