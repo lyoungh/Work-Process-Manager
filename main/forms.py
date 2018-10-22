@@ -86,7 +86,7 @@ class IssueForm(forms.ModelForm):
             ('공개', '공개'),
         )
         widgets = {
-            'work': forms.HiddenInput(attrs={'class': 'form-control col-md-12', 'disabled':''}),
+            'work': forms.HiddenInput(attrs={'class': 'form-control col-md-12'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
             'replay': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
             'cause': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
