@@ -74,7 +74,6 @@ class IssueForm(forms.ModelForm):
         self.fields['replay'].required = False
         self.fields['cause'].required = False
 
-
     class Meta:
         model = Issue
         fields = '__all__'

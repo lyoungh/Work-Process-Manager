@@ -162,10 +162,10 @@ class CreateIssueView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.method == 'GET':
-            # form = self.form_class(initial={'work': Work.objects.get(pk=self.kwargs['pk'])})
-            # # print(Work.objects.get(pk=self.kwargs['pk']))
-            # context['form'] = form
-            context['work'] = Work.objects.get(pk=self.kwargs['pk'])
+            form = self.form_class(initial={'work': Work.objects.get(pk=self.kwargs['work'])})
+            # print(Work.objects.get(pk=self.kwargs['pk']))
+            context['form'] = form
+            context['work'] = Work.objects.get(pk=self.kwargs['work'])
 
         return context
 
