@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Login</title>
+</head>
+<body>
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first mt-5">
+            {#            <img src="https://www.b-cube.in/wp-content/uploads/2014/05/aditya-300x177.jpg" id="icon" alt="User Icon" />#}
+            <h1>업무 관리</h1>
+        </div>
+
+        <!-- Login Form -->
+        <form action="." method="post">
+            {% csrf_token %}
+            <input type="text" id="login" class="fadeIn second" name="{{ form.username.html_name }}" placeholder="username">
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+
+            {#            <input class="fadeIn second" id="login" name="{{ form.username.html_name }}" type="text" />#}
+            {#            <input class="fadeIn third" id="password" name="{{ form.password.html_name }}" type="password" />#}
+
+            <input type="submit" class="fadeIn fourth" value="Log In">
+        </form>
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>로그인 실패!</strong>
+            </div>
+        {% endif %}
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="http://www.techandslow.com">Go to TechAndslow Site</a>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

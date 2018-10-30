@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
@@ -7,7 +8,7 @@ from django.views.generic.edit import FormMixin
 
 
 # Create your views here.
-class MainView(ListView, FormMixin):
+class MainView(LoginRequiredMixin,ListView, FormMixin):
     template_name = 'main/main.html'
     model = Work
 
