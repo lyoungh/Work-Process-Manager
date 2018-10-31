@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -48,3 +49,7 @@ class Issue(models.Model):
     replay = models.TextField(null=True)
     cause = models.TextField(null=True)
     solution = models.TextField(null=True)
+
+
+class MyUser(AbstractUser):
+    name = models.CharField(max_length=20)
