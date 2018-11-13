@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
@@ -23,7 +23,7 @@ class MainView(LoginRequiredMixin,ListView, FormMixin):
         return context
 
 
-class SearchView(ListView):
+class SearchView(LoginRequiredMixin, ListView):
     template_name = 'main/main.html'
     model = Work
 
@@ -60,7 +60,7 @@ class SearchView(ListView):
         return context
 
 
-class SearchNoConView(ListView):
+class SearchNoConView(LoginRequiredMixin, ListView):
     template_name = 'main/main.html'
     model = Work
 
@@ -91,7 +91,7 @@ class SearchNoConView(ListView):
         return context
 
 
-class SearchManView(ListView):
+class SearchManView(LoginRequiredMixin, ListView):
     template_name = 'main/main.html'
     model = Work
 
@@ -107,7 +107,7 @@ class SearchManView(ListView):
         return context
 
 
-class SearchStatusView(ListView):
+class SearchStatusView(LoginRequiredMixin, ListView):
     template_name = 'main/main.html'
     model = Work
 
@@ -143,7 +143,8 @@ def update_work(request, id):
         return redirect('/')  # 템플릿 파일 경로 지정, 데이터 전달
 
 
-class CreateWorkView(CreateView):
+class CreateWorkView(PermissionRequiredMixin, CreateView ):
+    permission_required = 'main.add_work'
     model = Work
     form_class = WorkForm
     template_name = 'main/work_form.html'
@@ -152,7 +153,8 @@ class CreateWorkView(CreateView):
         return reverse('index')
 
 
-class CreateIssueView(CreateView):
+class CreateIssueView(PermissionRequiredMixin, CreateView):
+    permission_required = 'main.add_issue'
     model = Issue
     form_class = IssueForm
     template_name = 'main/issue_form.html'
@@ -171,7 +173,8 @@ class CreateIssueView(CreateView):
         return context
 
 
-class UpdateWorkView(UpdateView):
+class UpdateWorkView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'main.change_work'
     model = Work
     form_class = WorkForm
     template_name = 'main/work_update_form.html'
@@ -180,7 +183,8 @@ class UpdateWorkView(UpdateView):
         return reverse('index')
 
 
-class UpdateIssueView(UpdateView):
+class UpdateIssueView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'main.change_Issue'
     model = Issue
     form_class = IssueForm
     template_name = 'main/issue_update_form.html'

@@ -11,6 +11,13 @@ class Employee(models.Model):
         return self.name
 
 
+class MyUser(AbstractUser):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
 class WorkStatus(models.Model):
     title = models.CharField(max_length=10)
     value = models.CharField(max_length=10)
@@ -28,7 +35,7 @@ class IssueStatus(models.Model):
 
 
 class Work(models.Model):
-    manager = models.ForeignKey(Employee, on_delete=models.SET_NULL, related_name='manager', null=True)
+    manager = models.ForeignKey(MyUser, on_delete=models.SET_NULL, related_name='manager', null=True)
     supporter = models.ManyToManyField(Employee, blank=True)
     work = models.TextField()
     status = models.ForeignKey(WorkStatus, on_delete=models.SET_NULL, related_name='status', null=True)
@@ -50,6 +57,3 @@ class Issue(models.Model):
     cause = models.TextField(null=True)
     solution = models.TextField(null=True)
 
-
-class MyUser(AbstractUser):
-    name = models.CharField(max_length=20)
