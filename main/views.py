@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -123,6 +124,7 @@ class SearchStatusView(LoginRequiredMixin, ListView):
         return context
 
 
+@permission_required('main.change_work')
 def update_work(request, id):
     if request.method == "POST":
         try:
@@ -199,11 +201,12 @@ class UpdateIssueView(PermissionRequiredMixin, UpdateView):
         return reverse('index')
 
 
-class DetailIssueView(DetailView):
+class DetailIssueView(LoginRequiredMixin, DetailView):
     model = Issue
     template_name = 'main/issue_detail.html'
 
 
+@permission_required('main.delete_work')
 def delete_work(request, id):
     if request.method == "GET":
         work = Work.objects.get(pk=id)
@@ -211,6 +214,7 @@ def delete_work(request, id):
         return redirect('/')
 
 
+@permission_required('main.delete_issue')
 def delete_issue(request, id):
     if request.method == "GET":
         issue = Issue.objects.get(pk=id)
