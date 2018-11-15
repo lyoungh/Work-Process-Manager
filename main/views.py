@@ -2,14 +2,14 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, TemplateView
 from .models import Work, Issue, WorkStatus, Employee
 from .forms import WorkForm, IssueForm
 from django.views.generic.edit import FormMixin
 
 
 # Create your views here.
-class MainView(LoginRequiredMixin,ListView, FormMixin):
+class MainView(LoginRequiredMixin, ListView, FormMixin):
     template_name = 'main/main.html'
     model = Work
 
@@ -29,9 +29,9 @@ class SearchView(LoginRequiredMixin, ListView):
     model = Work
 
     def get_queryset(self):
-        self.manager= self.kwargs['manager']
-        self.status= self.kwargs['status']
-        self.contents =self.kwargs['contents']
+        self.manager = self.kwargs['manager']
+        self.status = self.kwargs['status']
+        self.contents = self.kwargs['contents']
         if self.contents == "":
             contents = ""
 
@@ -66,8 +66,8 @@ class SearchNoConView(LoginRequiredMixin, ListView):
     model = Work
 
     def get_queryset(self):
-        self.manager= self.kwargs['manager']
-        self.status= self.kwargs['status']
+        self.manager = self.kwargs['manager']
+        self.status = self.kwargs['status']
 
         if self.manager == 'all' and self.status == 'all':
             return Work.objects.all()
@@ -104,7 +104,7 @@ class SearchManView(LoginRequiredMixin, ListView):
         context['issues'] = Issue.objects.all()
         context['status'] = WorkStatus.objects.all()
         context['employee'] = Employee.objects.all()
-        context['manager_query'] =self.kwargs['query']
+        context['manager_query'] = self.kwargs['query']
         return context
 
 
@@ -145,7 +145,8 @@ def update_work(request, id):
         return redirect('/')  # 템플릿 파일 경로 지정, 데이터 전달
 
 
-class CreateWorkView(PermissionRequiredMixin, CreateView ):
+class CreateWorkView(PermissionRequiredMixin, CreateView):
+    raise_exception = True
     permission_required = 'main.add_work'
     model = Work
     form_class = WorkForm
@@ -156,6 +157,7 @@ class CreateWorkView(PermissionRequiredMixin, CreateView ):
 
 
 class CreateIssueView(PermissionRequiredMixin, CreateView):
+    raise_exception = True
     permission_required = 'main.add_issue'
     model = Issue
     form_class = IssueForm
@@ -176,6 +178,7 @@ class CreateIssueView(PermissionRequiredMixin, CreateView):
 
 
 class UpdateWorkView(PermissionRequiredMixin, UpdateView):
+    raise_exception = True
     permission_required = 'main.change_work'
     model = Work
     form_class = WorkForm
@@ -186,6 +189,7 @@ class UpdateWorkView(PermissionRequiredMixin, UpdateView):
 
 
 class UpdateIssueView(PermissionRequiredMixin, UpdateView):
+    raise_exception = True
     permission_required = 'main.change_Issue'
     model = Issue
     form_class = IssueForm
@@ -206,7 +210,7 @@ class DetailIssueView(LoginRequiredMixin, DetailView):
     template_name = 'main/issue_detail.html'
 
 
-@permission_required('main.delete_work')
+@permission_required('main.delete_work', raise_exception=True)
 def delete_work(request, id):
     if request.method == "GET":
         work = Work.objects.get(pk=id)
@@ -214,7 +218,7 @@ def delete_work(request, id):
         return redirect('/')
 
 
-@permission_required('main.delete_issue')
+@permission_required('main.delete_issue', raise_exception=True)
 def delete_issue(request, id):
     if request.method == "GET":
         issue = Issue.objects.get(pk=id)
