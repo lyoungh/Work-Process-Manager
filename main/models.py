@@ -36,7 +36,7 @@ class IssueStatus(models.Model):
 
 class Work(models.Model):
     manager = models.ForeignKey(MyUser, on_delete=models.SET_NULL, related_name='manager', null=True)
-    supporter = models.ManyToManyField(Employee, blank=True)
+    supporter = models.ManyToManyField(MyUser, blank=True)
     work = models.TextField()
     status = models.ForeignKey(WorkStatus, on_delete=models.SET_NULL, related_name='status', null=True)
     start_date = models.DateField(default=datetime.now, null=True)

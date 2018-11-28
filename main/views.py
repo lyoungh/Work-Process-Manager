@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import render, redirect
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, TemplateView
-from .models import Work, Issue, WorkStatus, Employee
+from .models import Work, Issue, WorkStatus, Employee, MyUser
 from .forms import WorkForm, IssueForm
 from django.views.generic.edit import FormMixin
 
@@ -124,47 +125,47 @@ class SearchStatusView(LoginRequiredMixin, ListView):
         return context
 
 
-@permission_required('main.change_work')
-def update_work(request, id):
-    if request.method == "POST":
-        try:
-            work = Work.objects.get(pk=id)
-            print(work)
-        except Work.DoesNotExist:
-            work = None
-
-        form = WorkForm(request.POST, instance=work)
-        if form.is_valid():  # 폼 검증 메소드
-            form.save()
-            print('success')
-            return redirect('/')  # url의 name을 경로대신 입력한다.
-        else:
-            print(form.errors)
-            return redirect('/')
-    else:
-        return redirect('/')  # 템플릿 파일 경로 지정, 데이터 전달
-
-
-class CreateWorkView(PermissionRequiredMixin, CreateView):
-    raise_exception = True
-    permission_required = 'main.add_work'
+class CreateWorkView(LoginRequiredMixin, CreateView):
     model = Work
     form_class = WorkForm
     template_name = 'main/work_form.html'
+
+    def form_valid(self, form):
+        user = get_object_or_404(MyUser, pk=self.request.POST['manager'])
+        print(self.request.user)
+        if self.request.user != user:
+            raise PermissionDenied
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'GET':
+            user = get_object_or_404(MyUser, name=self.request.user)
+            form = self.form_class(initial={'manager': user})
+            # print(Work.objects.get(pk=self.kwargs['pk']))
+            context['form'] = form
+            # context['manager'] = MyUser.objects.get(username=self.request.user)
+
+        return context
 
     def get_success_url(self):
         return reverse('index')
 
 
-class CreateIssueView(PermissionRequiredMixin, CreateView):
+class CreateIssueView(LoginRequiredMixin, CreateView):
     raise_exception = True
-    permission_required = 'main.add_issue'
     model = Issue
     form_class = IssueForm
     template_name = 'main/issue_form.html'
 
     def get_success_url(self):
         return reverse('index')
+
+    def form_valid(self, form):
+        user = get_object_or_404(MyUser, pk=self.request.POST['manager'])
+        if self.request.user != user.name:
+            raise PermissionDenied
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
